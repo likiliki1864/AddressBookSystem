@@ -11,17 +11,17 @@ class AddressBookSystem {
     addContact(bookName, firstName, lastName, address, city, state, zip, phoneNumber, email) {
         if (!this.addressBooks[bookName])
             throw new Error(`${bookName} Address book does not exist. Please create it first.`);
-
+    
         const duplicateContact = this.addressBooks[bookName].filter(contact => 
             contact.firstName === firstName && contact.lastName === lastName
         );
-
+    
         if (duplicateContact.length > 0)
             throw new Error(`Duplicate contact found: ${firstName} ${lastName} already exists in ${bookName} address book.`);
-
-        if (!(/^[A-Z][a-zA-Z]{2,}$/).test(firstName))
+    
+        if (!(/^[A-Z][a-zA-Z'-]{2,}$/).test(firstName))
             throw new Error("First Name must start with a capital letter and be at least 3 characters long.");
-        if (!(/^[A-Z][a-zA-Z]{2,}$/).test(lastName))
+        if (!(/^[A-Z][a-zA-Z'-]{2,}$/).test(lastName))
             throw new Error("Last Name must start with a capital letter and be at least 3 characters long.");
         if (!(/^.{4,}$/).test(address))
             throw new Error("Address must be at least 4 characters long.");
@@ -35,7 +35,7 @@ class AddressBookSystem {
             throw new Error("Phone number must be a valid 10-digit number.");
         if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email))
             throw new Error("Email must be valid.");
-
+    
         let contact = {
             firstName: firstName,
             lastName: lastName,
@@ -44,9 +44,12 @@ class AddressBookSystem {
             state: state,
             zip: zip,
             phoneNumber: phoneNumber,
-            email: email
+            email: email,
+            toString: function() {
+                return `Name: ${this.firstName} ${this.lastName}, Address: ${this.address}, City: ${this.city}, State: ${this.state}, Zip: ${this.zip}, Phone: ${this.phoneNumber}, Email: ${this.email}`;
+            }
         };
-
+    
         this.addressBooks[bookName].push(contact);
         console.log(`Contact ${firstName} ${lastName} added to ${bookName} address book.`);
     }
@@ -140,10 +143,8 @@ class AddressBookSystem {
         if (state)
             results = results.filter(contact => contact.state === state);
         
-    
         if (results.length === 0)
             console.log("No contacts found.");
-
         else {
             console.log(`Contacts in ${city || state}:`);
             results.forEach(contact => {
@@ -188,5 +189,20 @@ class AddressBookSystem {
             countByState
         };
     }
-    
+
+    sortContacts(bookName) {
+        if (!this.addressBooks[bookName])
+            throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+
+        this.addressBooks[bookName].sort((a, b) => {
+            const fullNameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+            const fullNameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+            return fullNameA.localeCompare(fullNameB);
+        });
+
+        console.log(`Contacts in ${bookName} sorted alphabetically by name:`);
+        this.addressBooks[bookName].forEach(contact => {
+            console.log(contact.toString());
+        });
+    }
 }
