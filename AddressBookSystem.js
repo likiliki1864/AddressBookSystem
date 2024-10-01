@@ -106,4 +106,25 @@ class AddressBookSystem {
         console.log(`Number of contacts in ${bookName}: ${contactCount}`);
         return contactCount;
     }
+
+    searchByCityState(bookName, city = null, state = null) {
+        if (!this.addressBooks[bookName])
+            throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+
+        let results = this.addressBooks[bookName];
+
+        if (city)
+            results = results.filter(contact => contact.city === city);
+
+        if (state)
+            results = results.filter(contact => contact.state === state);
+
+        if (results.length === 0) {
+            console.log(`No contacts found in ${city ? city : ""} ${state ? state : ""}.`);
+            return [];
+        }
+
+        console.log(`Contacts found in ${city ? city : ""} ${state ? state : ""}:`, results);
+        return results;
+    }
 }
