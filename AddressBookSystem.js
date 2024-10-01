@@ -156,4 +156,37 @@ class AddressBookSystem {
     
         return results;
     }
+
+    countByCityOrState(bookName, city = null, state = null) {
+        if (!this.addressBooks[bookName])
+            throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+    
+        let results = this.addressBooks[bookName];
+    
+        if (city)
+            results = results.filter(contact => contact.city === city);
+    
+        if (state)
+            results = results.filter(contact => contact.state === state);
+    
+        let countByCity = 0;
+        let countByState = 0;
+    
+        if (city)
+            countByCity = results.filter(contact => contact.city === city).length;
+    
+        if (state)
+            countByState = results.filter(contact => contact.state === state).length;
+    
+        if (city)
+            console.log(`Number of contacts in ${city}: ${countByCity}`);
+        if (state)
+            console.log(`Number of contacts in ${state}: ${countByState}`);
+    
+        return {
+            countByCity,
+            countByState
+        };
+    }
+    
 }
