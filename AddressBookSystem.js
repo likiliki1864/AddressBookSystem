@@ -97,4 +97,13 @@ class AddressBookSystem {
         this.addressBooks[bookName].splice(contactIndex, 1);
         console.log(`Contact ${firstName} ${lastName} deleted from ${bookName} address book.`);
     }
+
+    countContacts(bookName) {
+        if (!this.addressBooks[bookName])
+            throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+
+        const contactCount = this.addressBooks[bookName].reduce((count, contact) => count + 1, 0);
+        console.log(`Number of contacts in ${bookName}: ${contactCount}`);
+        return contactCount;
+    }
 }
