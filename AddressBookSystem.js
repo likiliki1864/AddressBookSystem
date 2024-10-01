@@ -189,6 +189,26 @@ class AddressBookSystem {
             console.log(`Contacts in ${bookName} sorted by name:`);
             this.addressBooks[bookName].forEach(contact => console.log(contact.toString()));
         }
+
+        sortContacts(bookName, criterion = "name") {
+            if (!this.addressBooks[bookName])
+                throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+    
+            const sortBy = {
+                name: (a, b) => `${a.firstName} ${a.lastName}`.toLowerCase().localeCompare(`${b.firstName} ${b.lastName}`.toLowerCase()),
+                city: (a, b) => a.city.localeCompare(b.city),
+                state: (a, b) => a.state.localeCompare(b.state),
+                zip: (a, b) => a.zip.localeCompare(b.zip)
+            };
+    
+            if (!sortBy[criterion])
+                throw new Error("Invalid sorting criterion. Please use 'name', 'city', 'state', or 'zip'.");
+    
+            this.addressBooks[bookName].sort(sortBy[criterion]);
+    
+            console.log(`Contacts in ${bookName} sorted by ${criterion}:`);
+            this.addressBooks[bookName].forEach(contact => console.log(contact.toString()));
+        }
 }
 
 class Contact {
