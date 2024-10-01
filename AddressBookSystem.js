@@ -1,8 +1,18 @@
 class AddressBookSystem {
+    addressBooks = {};
 
-    contacts = [];
+        createAddressBook(bookName) {
+            if (this.addressBooks[bookName]) {
+                throw new Error("Address book already exists.");
+            }
+            this.addressBooks[bookName] = [];
+            console.log(`${bookName} Address book created.`);
+        }
 
-        addContact(firstName, lastName, address, city, state, zip, phoneNumber, email) {
+        addContact(bookName, firstName, lastName, address, city, state, zip, phoneNumber, email) {
+            if (!this.addressBooks[bookName])
+                throw new Error(`${bookName} Address book does not exist. Please create it first.`);
+
             const namePattern = /^[A-Z][a-zA-Z]{2,}$/;
             const addressCityStatePattern = /^.{4,}$/;
             const zipPattern = /^\d{5}$/;
@@ -37,7 +47,6 @@ class AddressBookSystem {
                 email: email
             };
 
-            this.contacts.push(contact);
-            
+            this.addressBooks[bookName].push(contact);
         }
 }
