@@ -12,6 +12,13 @@ class AddressBookSystem {
         if (!this.addressBooks[bookName])
             throw new Error(`${bookName} Address book does not exist. Please create it first.`);
 
+        const duplicateContact = this.addressBooks[bookName].filter(contact => 
+            contact.firstName === firstName && contact.lastName === lastName
+        );
+
+        if (duplicateContact.length > 0)
+            throw new Error(`Duplicate contact found: ${firstName} ${lastName} already exists in ${bookName} address book.`);
+
         if (!(/^[A-Z][a-zA-Z]{2,}$/).test(firstName))
             throw new Error("First Name must start with a capital letter and be at least 3 characters long.");
         if (!(/^[A-Z][a-zA-Z]{2,}$/).test(lastName))
@@ -41,6 +48,7 @@ class AddressBookSystem {
         };
 
         this.addressBooks[bookName].push(contact);
+        console.log(`Contact ${firstName} ${lastName} added to ${bookName} address book.`);
     }
 
     editContact(bookName, firstName, lastName, updatedInfo) {
